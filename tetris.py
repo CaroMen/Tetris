@@ -24,6 +24,14 @@ class shapes():
         self.y = 0
         self.color = random.randint(1, 7)
 
+        #Block shape
+        self.shape = [[1,1],
+                     [1,1]]
+
+        self.height = len(self.shape)
+        self.width = len(self.shape[0])
+
+
     def left_move(self, grid):
         if self.x > 0:
             if grid[self.y][self.x - 1] == 0:
@@ -144,7 +152,7 @@ while True:
     screen.update()
     # Move the shape
     # Open row
-    if shape.y == 23:  # if at bottom row
+    if shape.y == 23 - shape.height + 1:  # if at bottom row
         shape = shapes()  # make a new shape
         check_grid(grid)
     elif grid[shape.y + 1][shape.x] == 0:  # if space below, move
