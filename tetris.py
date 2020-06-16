@@ -9,11 +9,11 @@ import random
 # Screen Info
 screen = turtle.Screen()
 screen.title("Tetris by @CaroCode_")
-screen.bgcolor("black")
+screen.bgcolor("white")
 screen.setup(width=600, height=800)
 screen.tracer(0)
 
-delay = 0.05
+delay = 0.10
 
 # Shapes
 
@@ -91,6 +91,23 @@ class shapes():
                 if (grid[self.y + self.height][self.x + x] != 0):
                     return False
         return True
+
+    def rotate(self, grad):
+        # First erase_shape
+        self.erase_shape(grid)
+        rotated_shape = []
+        for x in range(len(self.shape[0])):
+            new_row = []
+            for y in range(len(self.shape) - 1, -1, -1):
+                new_row.append(self.shape[y][x])
+            rotated_shape.append(new_row)
+
+        right_side = self.x + len(rotated_shape[0])
+        if right_side < len(grid[0]):
+            self.shape = rotated_shape
+            # Update the height and width
+            self.height = len(self.shape)
+            self.width = len(self.shape[0])
 
 
 # List to store column and row information
@@ -170,11 +187,11 @@ def check_grid(grid):
 
 
 def draw_score(pen, score):
+    pen.color("black")
     pen.hideturtle()
     pen.goto(-75, 350)
     pen.write("Score: {}".format(score), move=False,
               align="left", font=("Arial", 24, "normal"))
-    pen.showturtle()
 
 
 # creates shapes
@@ -190,6 +207,7 @@ grid[shape.y][shape.x] = shape.color
 screen.listen()
 screen.onkey(lambda: shape.left_move(grid), "a")
 screen.onkey(lambda: shape.right_move(grid), "d")
+screen.onkey(lambda: shape.rotate(grid), "space")
 
 # Set score to zero
 score = 0
@@ -216,9 +234,9 @@ while True:
         shape = shapes()  # else, make a new shape
         check_grid(grid)
 
-    # draw screen
-    draw_score(pen, score)
+    # draw screen and score
     create_grid(pen, grid)
+    draw_score(pen, score)
 
     time.sleep(delay)
 
