@@ -152,13 +152,22 @@ while True:
     screen.update()
     # Move the shape
     # Open row
+    #Check for bottom
     if shape.y == 23 - shape.height + 1:  # if at bottom row
         shape = shapes()  # make a new shape
         check_grid(grid)
-    elif grid[shape.y + 1][shape.x] == 0:  # if space below, move
-        grid[shape.y][shape.x] = 0  # sets the previous index back to zero
+    #Check for collision with next row
+    elif grid[shape.y + shape.height][shape.x] == 0 and grid[shape.y + shape.height][shape.x + shape.width - 1] == 0:  # if space below, move
+        #Erase current shape
+        for y in range(shape.height):
+            for x in range(shape.width):
+                grid[shape.y + y][shape.x + x] = 0  # sets the previous index back to zero
+        #Move shape by 1
         shape.y += 1  # goes to the next index
-        grid[shape.y][shape.x] = shape.color  # gives the color
+        #Draw shape again 
+        for y in range(shape.height):
+            for x in range(shape.width):
+                grid[shape.y + y][shape.x + x] = shape.color  # gives the color
     else:
         shape = shapes()  # else, make a new shape
         check_grid(grid)
